@@ -1,57 +1,107 @@
-﻿using projetCourNet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace YourNamespace
+namespace projetCourNet
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // ===== Staff =====
+            // 1) Plane created with default constructor + property assignment
+            Plane p1 = new Plane();
+            p1.PlaneId = 1;
+            p1.Capacity = 150;
+            p1.ManufactureDate = new DateTime(2020, 2, 1);
+            p1.PlaneType = PlaneType.Boing;
+
+            // 2) Plane created with parameterized constructor
+            Plane p2 = new Plane(PlaneType.Airbus, 250, new DateTime(2022, 5, 10));
+            p2.PlaneId = 2;
+
+            // 3) Plane created with object initializer
+            Plane p3 = new Plane
+            {
+                PlaneId = 3,
+                Capacity = 300,
+                ManufactureDate = new DateTime(2023, 1, 1),
+                PlaneType = PlaneType.Airbus
+            };
+
+            Console.WriteLine("=== PLANES ===");
+            Console.WriteLine(p1);
+            Console.WriteLine(p2);
+            Console.WriteLine(p3);
+
+            // Staff
             Staff staff = new Staff
             {
                 FirstName = "Zied",
                 LastName = "Alimi",
                 PassportNumber = "AA123456",
                 EmailAddress = "zied@test.com",
-                TelNumber = 12345678,
+                TelNumber = "12345678",
+                BirthDate = new DateTime(2002, 1, 1),
                 EmploymentDate = DateTime.Now,
                 Function = "Pilot",
                 Salary = 5000
             };
 
-            // ===== Traveller =====
+            // Traveller
             Traveller traveller = new Traveller
             {
                 FirstName = "Ali",
                 LastName = "Ben Salah",
                 PassportNumber = "BB987654",
                 EmailAddress = "ali@test.com",
-                TelNumber = 87654321, 
+                TelNumber = "87654321",
+                BirthDate = new DateTime(2000, 5, 15),
                 Nationality = "Tunisian",
                 HealthInformation = "Good"
             };
 
-            // ===== Display =====
-            Console.WriteLine("=== Staff ===");
-            Console.WriteLine(staff);
+            // Passenger
+            Passenger passenger = new Passenger
+            {
+                FirstName = "Sara",
+                LastName = "Mansour",
+                PassportNumber = "CC111222",
+                EmailAddress = "sara@test.com",
+                TelNumber = "99887766",
+                BirthDate = new DateTime(1999, 10, 10)
+            };
 
-            Console.WriteLine("\n=== Traveller ===");
+            Console.WriteLine("\n=== PASSENGERS ===");
+            Console.WriteLine(passenger);
+            Console.WriteLine(staff);
             Console.WriteLine(traveller);
 
-            // ===== Polymorphism test =====
-            List<Passenger> people = new List<Passenger>();
-            people.Add(staff);
-            people.Add(traveller);
+            // CheckProfile tests
+            Console.WriteLine("\n=== CHECK PROFILE ===");
+            Console.WriteLine(passenger.CheckProfile("Sara", "Mansour"));
+            Console.WriteLine(passenger.CheckProfile("Sara", "Mansour", "sara@test.com"));
+            Console.WriteLine(passenger.CheckProfile("Sara", "Mansour", "sara@test.com", true));3
 
-            Console.WriteLine("\n=== All Passengers ===");
+            // Polymorphism test
+            List<Passenger> people = new List<Passenger>
+            {
+                passenger,
+                staff,
+                traveller
+            };
+
+            Console.WriteLine("\n=== PASSENGER TYPES ===");
+            foreach (Passenger p in people)
+            {
+                Console.WriteLine(p.PassengerType());
+            }
+
+            Console.WriteLine("\n=== ALL PASSENGERS ===");
             foreach (Passenger p in people)
             {
                 Console.WriteLine(p);
             }
 
-            Console.ReadLine(); // keep console open
+            Console.ReadLine();
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace projetCourNet
 {
@@ -11,13 +8,26 @@ namespace projetCourNet
         Boing,
         Airbus
     }
+
     public class Plane
     {
         public int PlaneId { get; set; }
         public PlaneType PlaneType { get; set; }
         public DateTime ManufactureDate { get; set; }
         public int Capacity { get; set; }
-        public virtual List<Flight> Flights { get; set; }
+
+        public List<Flight> Flights { get; set; } = new List<Flight>();
+
+        public Plane()
+        {
+        }
+
+        public Plane(PlaneType pt, int capacity, DateTime date)
+        {
+            PlaneType = pt;
+            Capacity = capacity;
+            ManufactureDate = date;
+        }
 
         public override string ToString()
         {
@@ -27,5 +37,4 @@ namespace projetCourNet
                    ", PlaneType: " + PlaneType;
         }
     }
-
 }
