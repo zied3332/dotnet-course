@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using projetCourNet.Services;
 
 namespace projetCourNet
 {
@@ -7,6 +8,10 @@ namespace projetCourNet
     {
         static void Main(string[] args)
         {
+            // =========================
+            // TP1 - PLANES
+            // =========================
+
             // 1) Plane created with default constructor + property assignment
             Plane p1 = new Plane();
             p1.PlaneId = 1;
@@ -32,7 +37,10 @@ namespace projetCourNet
             Console.WriteLine(p2);
             Console.WriteLine(p3);
 
-            // Staff
+            // =========================
+            // TP1 - PASSENGERS
+            // =========================
+
             Staff staff = new Staff
             {
                 FirstName = "Zied",
@@ -46,7 +54,6 @@ namespace projetCourNet
                 Salary = 5000
             };
 
-            // Traveller
             Traveller traveller = new Traveller
             {
                 FirstName = "Ali",
@@ -59,7 +66,6 @@ namespace projetCourNet
                 HealthInformation = "Good"
             };
 
-            // Passenger
             Passenger passenger = new Passenger
             {
                 FirstName = "Sara",
@@ -79,7 +85,7 @@ namespace projetCourNet
             Console.WriteLine("\n=== CHECK PROFILE ===");
             Console.WriteLine(passenger.CheckProfile("Sara", "Mansour"));
             Console.WriteLine(passenger.CheckProfile("Sara", "Mansour", "sara@test.com"));
-            Console.WriteLine(passenger.CheckProfile("Sara", "Mansour", "sara@test.com", true));3
+            Console.WriteLine(passenger.CheckProfile("Sara", "Mansour", "sara@test.com", true));
 
             // Polymorphism test
             List<Passenger> people = new List<Passenger>
@@ -100,6 +106,39 @@ namespace projetCourNet
             {
                 Console.WriteLine(p);
             }
+
+            // =========================
+            // TP2 - TEST DATA + SERVICES
+            // =========================
+
+            Console.WriteLine("\n=== TP2 TEST ===");
+
+            // Initialize static test data
+            TestData.Initialize();
+
+            // Create service instance
+            FlightMethods service = new FlightMethods();
+            service.Flights = TestData.listFlights;
+
+            // Test GetFlightDates with FOR
+            List<DateTime> datesFor = service.GetFlightDates("Paris");
+            Console.WriteLine("\nFlights to Paris (FOR):");
+            foreach (DateTime date in datesFor)
+            {
+                Console.WriteLine(date);
+            }
+
+            // Test GetFlightDates with FOREACH
+            List<DateTime> datesForeach = service.GetFlightDatesWithForeach("Paris");
+            Console.WriteLine("\nFlights to Paris (FOREACH):");
+            foreach (DateTime date in datesForeach)
+            {
+                Console.WriteLine(date);
+            }
+
+            // Test GetFlights with dynamic filter
+            Console.WriteLine("\nFlights filtered by Destination = Paris:");
+            service.GetFlights("Destination", "Paris");
 
             Console.ReadLine();
         }
