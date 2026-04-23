@@ -12,18 +12,15 @@ namespace projetCourNet
             // TP1 - PLANES
             // =========================
 
-            // 1) Plane created with default constructor + property assignment
             Plane p1 = new Plane();
             p1.PlaneId = 1;
             p1.Capacity = 150;
             p1.ManufactureDate = new DateTime(2020, 2, 1);
             p1.PlaneType = PlaneType.Boing;
 
-            // 2) Plane created with parameterized constructor
             Plane p2 = new Plane(PlaneType.Airbus, 250, new DateTime(2022, 5, 10));
             p2.PlaneId = 2;
 
-            // 3) Plane created with object initializer
             Plane p3 = new Plane
             {
                 PlaneId = 3,
@@ -120,26 +117,117 @@ namespace projetCourNet
             FlightMethods service = new FlightMethods();
             service.Flights = TestData.listFlights;
 
-            // Test GetFlightDates with FOR
+            // =========================
+            // EXISTING TESTS
+            // =========================
+
             List<DateTime> datesFor = service.GetFlightDates("Paris");
-            Console.WriteLine("\nFlights to Paris (FOR):");
+            Console.WriteLine("\nFlights to Paris (LINQ):");
             foreach (DateTime date in datesFor)
             {
                 Console.WriteLine(date);
             }
 
-            // Test GetFlightDates with FOREACH
-            List<DateTime> datesForeach = service.GetFlightDatesWithForeach("Paris");
-            Console.WriteLine("\nFlights to Paris (FOREACH):");
-            foreach (DateTime date in datesForeach)
-            {
-                Console.WriteLine(date);
-            }
-
-            // Test GetFlights with dynamic filter
             Console.WriteLine("\nFlights filtered by Destination = Paris:");
             service.GetFlights("Destination", "Paris");
 
+            // =========================
+            // 2 TEST ShowFlightDetails
+            // =========================
+            Console.WriteLine("\n=== 2 - TEST ShowFlightDetails ===");
+            service.ShowFlightDetails(TestData.listFlights[0].Plane);
+
+            // =========================
+            // 3 TEST ProgrammedFlightNumber
+            // =========================
+            Console.WriteLine("\n=== 3 - TEST ProgrammedFlightNumber ===");
+            DateTime startDate = new DateTime(2022, 5, 1);
+            int programmedCount = service.ProgrammedFlightNumber(startDate);
+            Console.WriteLine($"Flights between {startDate.ToShortDateString()} and {startDate.AddDays(7).ToShortDateString()} = {programmedCount}");
+
+            // =========================
+            // 4 TEST DurationAverage
+            // =========================
+            Console.WriteLine("\n=== 4 - TEST DurationAverage ===");
+            double averageDuration = service.DurationAverage("Paris");
+            Console.WriteLine($"Average duration for Paris flights = {averageDuration}");
+
+            // =========================
+            // 5 TEST OrderedDurationFlights
+            // =========================
+            Console.WriteLine("\n=== 5 - TEST OrderedDurationFlights ===");
+            List<Flight> orderedFlights = service.OrderedDurationFlights();
+            foreach (Flight flight in orderedFlights)
+            {
+                Console.WriteLine($"FlightId: {flight.FlightId}, Destination: {flight.Destination}, Duration: {flight.EstimatedDuration}");
+            }
+
+            // =========================
+            //  6 TEST LongestFlight
+            // =========================
+            Console.WriteLine("\n=== 6 - TEST LongestFlight ===");
+            Flight longestFlight = service.LongestFlight();
+            if (longestFlight != null)
+            {
+                Console.WriteLine($"Longest flight -> FlightId: {longestFlight.FlightId}, Destination: {longestFlight.Destination}, Duration: {longestFlight.EstimatedDuration}");
+            }
+
+            // =========================
+            // 7 TEST SeniorTravellers
+            // =========================
+            Console.WriteLine("\n=== 7 - TEST SeniorTravellers ===");
+            List<Traveller> seniorTravellers = service.SeniorTravellers(TestData.listFlights[0]);
+            foreach (Traveller t in seniorTravellers)
+            {
+                Console.WriteLine($"{t.FirstName} {t.LastName} - BirthDate: {t.BirthDate.ToShortDateString()}");
+            }
+
+            // =========================
+            // 8 TEST DestinationGroupedFlights
+            // =========================
+            Console.WriteLine("\n=== 8 - TEST DestinationGroupedFlights ===");
+            service.DestinationGroupedFlights();
+
+            // =========================
+            // 9 TEST FlightCountByDestination
+            // =========================
+            Console.WriteLine("\n===  9 - TEST FlightCountByDestination ===");
+            service.FlightCountByDestination();
+
+            // =========================
+            // 10 TEST MostOccupiedFlight
+            // =========================
+            Console.WriteLine("\n===  10 - TEST MostOccupiedFlight ===");
+            Flight mostOccupied = service.MostOccupiedFlight();
+            if (mostOccupied != null)
+            {
+                Console.WriteLine($"Most occupied flight -> FlightId: {mostOccupied.FlightId}, Destination: {mostOccupied.Destination}, Passengers: {mostOccupied.Passengers.Count}");
+            }
+
+            // =========================
+            // 11 TEST GetDestinations
+            // =========================
+            Console.WriteLine("\n=== 11 - TEST GetDestinations ===");
+            List<string> destinations = service.GetDestinations();
+            foreach (string destination in destinations)
+            {
+                Console.WriteLine(destination);
+            }
+
+            // =========================
+            // 12 TEST ExistsParisFlight
+            // =========================
+            Console.WriteLine("\n===  12 - TEST ExistsParisFlight ===");
+            bool existsParis = service.ExistsParisFlight();
+            Console.WriteLine($"Is there a flight to Paris? {existsParis}");
+
+           
+
+            Console.WriteLine("\n=== TEST EXTENSION METHOD ===");
+            Console.WriteLine(passenger.UpperFullName());
+            Console.WriteLine(traveller.UpperFullName());
+            Console.WriteLine(staff.UpperFullName());
+            
             Console.ReadLine();
         }
     }
